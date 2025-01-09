@@ -3,8 +3,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { User } from '../../users/entities/user.entity';
 
 @Entity({ name: 'companies' })
 export class Company {
@@ -12,16 +15,13 @@ export class Company {
   id: string;
 
   @Column('text')
-  companyName: string;
+  company_name: string;
 
   @Column('text')
-  managerName: string;
+  nit: string;
 
   @Column('text', { unique: true })
   email: string;
-
-  @Column('text')
-  password: string;
 
   @Column('text')
   address: string;
@@ -35,23 +35,27 @@ export class Company {
   @Column('text')
   city: string;
 
-  @Column('text')
-  legalText: string;
-
-  @Column('text')
-  urlLogo: string;
+  @Column('text', { nullable: true })
+  url_logo: string;
 
   @Column('bool', { default: true })
-  isActive: boolean;
+  is_active: boolean;
+
+  @Column('text')
+  legal_text: string;
 
   @Column('text', { nullable: true })
-  paperSize: string;
+  paper_size: string;
 
   @Column('int', { default: 0 })
-  printFormat: number;
+  print_format: number;
 
   @Column('text', { nullable: true })
-  urlBackupDB: string;
+  url_backup_db: string;
+
+  // Relations
+  @OneToMany(() => User, (user) => user.company)
+  users: User[];
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {
