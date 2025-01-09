@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-export const validateErrors = (error: any, message = '') => {
+export const validateErrors = (error: any, message = '', field = 'valor') => {
   if (error.code === '23505') {
-    throw new BadRequestException(`Ya existe ${message} con ese valor`);
+    throw new BadRequestException(`Ya existe ${message} con ese ${field}`);
   }
 
   if (error.status === 400) {

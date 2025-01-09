@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  // Delete,
   ParseUUIDPipe,
   Query,
 } from '@nestjs/common';
@@ -42,9 +41,4 @@ export class RolesController {
   ) {
     return this.rolesService.update(id, updateRoleDto);
   }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.rolesService.remove(+id);
-  // }
 }
