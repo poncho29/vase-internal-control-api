@@ -15,8 +15,11 @@ export class Role {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('text')
+  @Column('text', { unique: true })
   role_name: string;
+
+  @Column('bool', { default: true })
+  is_active: boolean;
 
   // Relations
   @OneToMany(() => User, (user) => user.role)

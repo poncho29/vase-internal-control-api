@@ -8,7 +8,6 @@ import { PermissionsController } from './permissions.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Permission])],
-  exports: [PermissionsService],
   controllers: [PermissionsController],
   providers: [PermissionsService],
 })
