@@ -41,7 +41,7 @@ export class Company {
   @Column('bool', { default: true })
   is_active: boolean;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   legal_text: string;
 
   @Column('text', { nullable: true })

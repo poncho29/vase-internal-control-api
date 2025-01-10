@@ -1,6 +1,7 @@
 import {
   IsBoolean,
   IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
@@ -10,10 +11,12 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()
+  @IsString({ message: 'El nombre debe ser una cadena de texto' })
+  @IsNotEmpty({ message: 'El nombre es requerido' })
   full_name: string;
 
-  @IsEmail()
+  @IsEmail({}, { message: 'El email debe ser una dirección de correo válida' })
+  @IsNotEmpty({ message: 'El email es requerido' })
   email: string;
 
   @IsString({ message: 'La contraseña debe ser una cadena de texto' })
@@ -23,13 +26,16 @@ export class CreateUserDto {
     message:
       'La contraseña debe tener una letra mayúscula, una minúscula y un número.',
   })
+  @IsNotEmpty({ message: 'La contraseña es requerida' })
   password: string;
 
-  @IsString()
-  @MinLength(10)
+  @IsString({ message: 'El telefono debe ser una cadena de texto' })
+  @MinLength(10, { message: 'El telefono debe tener 10 caracteres' })
+  @IsNotEmpty({ message: 'El telefono es requerido' })
   phone: string;
 
   @IsUUID('4', { message: 'El rol debe ser un UUID' })
+  @IsNotEmpty({ message: 'El rol es requerido' })
   role: string;
 
   @IsBoolean({ message: 'El valor de is_active debe ser un booleano' })
