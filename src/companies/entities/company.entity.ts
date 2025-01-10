@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
+import { Customer } from '../../customers/entities/customer.entity';
 
 @Entity({ name: 'companies' })
 export class Company {
@@ -56,6 +57,9 @@ export class Company {
   // Relations
   @OneToMany(() => User, (user) => user.company)
   users: User[];
+
+  @OneToMany(() => Customer, (customer) => customer.company)
+  customers: Customer[];
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {
