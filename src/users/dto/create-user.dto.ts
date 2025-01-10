@@ -38,6 +38,10 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'El rol es requerido' })
   role: string;
 
+  @IsUUID('4', { message: 'El company_id debe ser un UUID' })
+  @IsOptional()
+  company_id?: string;
+
   @IsBoolean({ message: 'El valor de is_active debe ser un booleano' })
   @IsOptional()
   is_active?: boolean;

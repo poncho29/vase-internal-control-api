@@ -8,8 +8,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { User } from './entities/user.entity';
+import { Company } from '../companies/entities/company.entity';
 import { Role } from '../roles/entities/role.entity';
+import { User } from './entities/user.entity';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -20,6 +21,9 @@ import { validateErrors } from '../utils';
 @Injectable()
 export class UsersService {
   constructor(
+    @InjectRepository(Company)
+    private readonly companyRepository: Repository<Company>,
+
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
@@ -29,6 +33,24 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try {
+      let company: Company | null = null;
+
+      if (createUserDto.company_id) {
+        company = await this.companyRepository.findOne({
+          where: { id: createUserDto.company_id },
+        });
+
+        if (!company)
+          throw new NotFoundException(
+            `La empresa con ID ${createUserDto.company_id} no existe`,
+          );
+
+        if (!company.is_active)
+          throw new BadRequestException(
+            `La empresa ${company.company_name} está inactiva`,
+          );
+      }
+
       const role = await this.roleRepository.findOne({
         where: { id: createUserDto.role },
       });
@@ -44,8 +66,9 @@ export class UsersService {
       const user = this.userRepository.create({
         ...createUserDto,
         password: bcrypt.hashSync(createUserDto.password, 10),
-        role,
         is_active: createUserDto.is_active ?? true,
+        role,
+        company,
       });
 
       const newUser = await this.userRepository.save(user);
